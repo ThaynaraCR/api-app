@@ -4,6 +4,6 @@ const PropostaController = require('../controllers/PropostaControllers')
 
 /* listar propostas. */
 router.get('/',PropostaController.index);
-router.get('/filter',PropostaController.filter)
+router.post('/filter',PropostaController.filter)
 
 module.exports = router;

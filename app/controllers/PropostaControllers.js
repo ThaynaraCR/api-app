@@ -1,33 +1,43 @@
-const Sequelize = require('sequelize')
-const config = require('../config/database')
-const PropostaController = {
-  index: async (req,res) =>{
-    const db = new Sequelize(config)
-    // let login = req.body.login;
-    // let senha = req.body.senha;
-    let banco = 'itau';
+const Sequelize = require('sequelize');
+const config = require('../config/database');
 
+
+//trazer 5 ultimas propostas 
+const PropostaController = {
+  index: async (req, res) => {
+    const db = new Sequelize(config)
     const result = await db.query(
-      'select * from propostas where banco_origi = :banco order by data_envio DESC limit 5',
-    {
-      replacements:{
-        banco
-        // login,
-        // senha
-      },
-      type:Sequelize.QueryTypes.SELECT
-    })
-    
+      `select * from vw_app where id_parceiro = 
+      38 order by data_envio DESC limit 5 `, {
+        type: Sequelize.QueryTypes.SELECT
+      })
     res.send(result)
   },
-  filter: async (req,res)=>{
-    const db = new Sequelize(config)
-    let dados = {proposta:12345,cpf:"",status:'pegali'}
-    
-    const result = await db.query(
-    `SELECT * FROM propostas 
-    where `)
 
+
+  //trazer propostas filtradas 
+  filter: async (req, res) => {
+    const db = new Sequelize(config)
+    let filtro = req.body
+
+
+    
+    let consulta = 'SELECT * FROM propostas where id_parceiro = 38'
+
+    Object.keys(filtro).forEach((key) => {
+    if (filtro[key] != " "){
+    consulta = consulta +' and '+ key + ' = '+ filtro[key]
+    }
+    
+  })
+
+    
+
+     const result = await db.query(
+      consulta,
+      {
+        type:Sequelize.QueryTypes.SELECT
+      })
     res.send(result)
   }
 }
